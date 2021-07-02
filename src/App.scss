@@ -21,25 +21,41 @@
         height: 150px;
         width: 150px;
       }
-      .flash{
-  
+      .flash.flash{
+        border: 3px solid white;
+        border-radius: 5px;
+        box-sizing: border-box;
       }
       .red{
         background-color: red;
+        &.flash{
+          background-color: rgba(255, 0, 0, 0.322);
+        }
       }
       .green{
         background-color: green;
+        &.flash{
+          background-color: rgba(0, 128, 0, 0.322);
+        }
       }
       .yellow{
         background-color: yellow;
+        &.flash{
+          background-color: rgba(255, 255, 0, 0.322);
+        }
       }
       .blue{
         background-color: blue;
+        &.flash{
+          background-color: rgba(0, 0, 255, 0.322);
+        }
       }
     }
     .startButton{
       position: absolute;
       width: 100px;
+      padding-top: 10px;
+      padding-bottom: 10px;
     }
   }
 }
