@@ -1,0 +1,45 @@
+.App {
+  text-align: center;
+
+  .App-header {
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    // font-size: calc(10px + 2vmin);
+    color: white;
+
+    .playgroundWrapper{
+
+      display: flex;
+      width: 300px;
+      flex-wrap: wrap;
+      
+      .colorCard{
+        height: 150px;
+        width: 150px;
+      }
+      .flash{
+  
+      }
+      .red{
+        background-color: red;
+      }
+      .green{
+        background-color: green;
+      }
+      .yellow{
+        background-color: yellow;
+      }
+      .blue{
+        background-color: blue;
+      }
+    }
+    .startButton{
+      position: absolute;
+      width: 100px;
+    }
+  }
+}
