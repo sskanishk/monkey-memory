@@ -1,118 +1,137 @@
-import './App.scss';
-import ColorCard from './components/ColorCard';
-import { useEffect, useState } from "react";
-import timeout from './utils/util';
-import { copy } from 'fs-extra';
+import "./App.scss";
+import { useState, useEffect } from "react";
+import ColorCard from "./components/ColorCard";
+import timeout from "./utils/util";
 
 function App() {
-
   const [isOn, setIsOn] = useState(false);
-  const colorList = ["green", "red", "yellow", "blue"]
-  const initialPlay = {
+
+  const colorList = ["green", "red", "yellow", "blue"];
+
+  const initPlay = {
     isDisplay: false,
     colors: [],
     score: 0,
     userPlay: false,
-    userColors: []
+    userColors: [],
+  };
+
+  const [play, setPlay] = useState(initPlay);
+  const [flashColor, setFlashColor] = useState("");
+
+  function startHandle() {
+    setIsOn(true);
   }
-  const [play, setPlay] = useState(initialPlay)
-
-  const [flashColor, setflashColor] = useState("")
 
   useEffect(() => {
-    if(isOn) {
-      setPlay({ ...initialPlay, isDisplay: true})
+    if (isOn) {
+      setPlay({ ...initPlay, isDisplay: true });
     } else {
-      setPlay(initialPlay)
+      setPlay(initPlay);
     }
-  }, [isOn])
+  }, [isOn]);
 
   useEffect(() => {
-    if(isOn && play.isDisplay) {
-      let newColor = colorList[Math.floor(Math.random()*4)]
-      const copyColor = [... play.colors];
-      copyColor.push(newColor);
-      setPlay({...play, colors: copyColor})
+    if (isOn && play.isDisplay) {
+      let newColor = colorList[Math.floor(Math.random() * 4)];
+
+      const copyColors = [...play.colors];
+      copyColors.push(newColor);
+      setPlay({ ...play, colors: copyColors });
     }
-  }, [isOn, play.isDisplay])
+  }, [isOn, play.isDisplay]);
 
   useEffect(() => {
-    if(isOn && play.isDisplay && play.colors.length) {
-      displayColors()
+    if (isOn && play.isDisplay && play.colors.length) {
+      displayColors();
     }
-  }, [isOn, play.isDisplay, play.colors.length])
+  }, [isOn, play.isDisplay, play.colors.length]);
 
   async function displayColors() {
+    await timeout(1000);
     for (let i = 0; i < play.colors.length; i++) {
-      const element = play.colors[i];
-      setflashColor(element)
-      await timeout(1000)
-      setflashColor("")
-      await timeout(1000)
+      setFlashColor(play.colors[i]);
+      await timeout(1000);
+      setFlashColor("");
+      await timeout(1000);
 
-      if(i === play.colors.length - 1) {
-        const copyColors = [ ...play.colors ];
+      if (i === play.colors.length - 1) {
+        const copyColors = [...play.colors];
+
         setPlay({
           ...play,
           isDisplay: false,
           userPlay: true,
-          userColors: copyColors.reverse()
-        })
+          userColors: copyColors.reverse(),
+        });
       }
     }
   }
 
-  async function cardClickhandle(color) {
-    if( play.userPlay && !play.isDisplay ){
+  async function cardClickHandle(color) {
+    if (!play.isDisplay && play.userPlay) {
+      const copyUserColors = [...play.userColors];
+      const lastColor = copyUserColors.pop();
+      setFlashColor(color);
 
-       const copyUserColors = [ ...play.userColors ]
-       const lastColor = copyUserColors.pop()
-       setflashColor(color)
-        
-      if(color === lastColor) {
-        if(copyUserColors.length) {
-          setPlay({ ...play, userColors:copyUserColors })
+      if (color === lastColor) {
+        if (copyUserColors.length) {
+          setPlay({ ...play, userColors: copyUserColors });
         } else {
-          await timeout(1000)
-          setPlay({ ...play, isDisplay: true, userPlay: false, score: play.colors.length, userColors: []})
+          await timeout(1000);
+          setPlay({
+            ...play,
+            isDisplay: true,
+            userPlay: false,
+            score: play.colors.length,
+            userColors: [],
+          });
         }
       } else {
-        await timeout(1000)
-        setPlay({ ...initialPlay,  score: play.colors.length })
+        await timeout(1000);
+        setPlay({ ...initPlay, score: play.colors.length });
       }
-      await timeout(1000)
-      setflashColor("")
+      await timeout(1000);
+      setFlashColor("");
     }
   }
 
-  function startGame() {
-    setIsOn(true)
+  function closeHandle() {
+    setIsOn(false);
   }
 
   return (
     <div className="App">
-      <div className="App-header">
-        <h1>Simon Says</h1>
-        
-        <div className="playgroundWrapper">
-          {
-            colorList && colorList.map((color) => {
-              return <ColorCard onClick={() => cardClickhandle(color)} color={color} flash={flashColor === color}/>
-            })
-          }
+      <header className="App-header">
+        <div className="cardWrapper">
+          {colorList &&
+            colorList.map((v, i) => (
+              <ColorCard
+                key={i}
+                onClick={() => {
+                  cardClickHandle(v);
+                }}
+                flash={flashColor === v}
+                color={v}
+              ></ColorCard>
+            ))}
         </div>
-        {
-          !isOn &&
-          !play.score &&
-          <button onClick={startGame} className="startButton">Start</button>
-        }
-        {
-          isOn &&
-          ( play.userPlay || play.isDisplay) &&
+
+        {isOn && !play.isDisplay && !play.userPlay && play.score && (
+          <div className="lost">
+            <div>FinalScore: {play.score}</div>
+            <button onClick={closeHandle}>Close</button>
+          </div>
+        )}
+        {!isOn && !play.score && (
+          <button onClick={startHandle} className="startButton">
+            Start
+          </button>
+        )}
+        {isOn && (play.isDisplay || play.userPlay) && (
           <div className="score">{play.score}</div>
-        }
-        
-      </div>
+        )}
+      </header>
     </div>
   );
 }
