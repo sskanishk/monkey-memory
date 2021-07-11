@@ -6,7 +6,7 @@ import timeout from "./utils/util";
 function App() {
   const [isOn, setIsOn] = useState(false);
 
-  const colorList = ["green", "red", "yellow", "blue"];
+  const colorList = ['yellow', 'green', 'brown', 'lightgreen', 'black', 'pink', 'violet', 'lightblue', 'gray', 'orange', 'blue', 'red'];
 
   const initPlay = {
     isDisplay: false,
@@ -33,7 +33,7 @@ function App() {
 
   useEffect(() => {
     if (isOn && play.isDisplay) {
-      let newColor = colorList[Math.floor(Math.random() * 4)];
+      let newColor = colorList[Math.floor(Math.random() * 12)];
 
       const copyColors = [...play.colors];
       copyColors.push(newColor);
@@ -102,35 +102,39 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <div className="cardWrapper">
-          {colorList &&
-            colorList.map((v, i) => (
-              <ColorCard
-                key={i}
-                onClick={() => {
-                  cardClickHandle(v);
-                }}
-                flash={flashColor === v}
-                color={v}
-              ></ColorCard>
-            ))}
+      <div>
+          <h1>Monkey Memory</h1>
         </div>
-
-        {isOn && !play.isDisplay && !play.userPlay && play.score && (
-          <div className="lost">
-            <div>FinalScore: {play.score}</div>
-            <button onClick={closeHandle}>Close</button>
+      <header className="App-header">
+        <div>
+          <div className="cardWrapper">
+            {colorList &&
+              colorList.map((v, i) => (
+                <ColorCard
+                  key={i}
+                  onClick={() => {
+                    cardClickHandle(v);
+                  }}
+                  flash={flashColor === v}
+                  color={v}
+                ></ColorCard>
+              ))}
           </div>
-        )}
-        {!isOn && !play.score && (
-          <button onClick={startHandle} className="startButton">
-            Start
-          </button>
-        )}
-        {isOn && (play.isDisplay || play.userPlay) && (
-          <div className="score">{play.score}</div>
-        )}
+        </div>
+        <div className="buttonsDiv">
+          {isOn && !play.isDisplay && !play.userPlay && play.score && (
+            <div className="lost">
+              <div>FinalScore: {play.score}</div>
+              <button onClick={closeHandle} className="styledButton" data-label="Close" />
+            </div>
+          )}
+          {!isOn && !play.score && ( 
+            <button onClick={startHandle} className="startButton styledButton" data-label="Start Game" />
+          )}
+          {isOn && (play.isDisplay || play.userPlay) && (
+            <div className="score">{play.score}</div>
+          )}
+        </div>
       </header>
     </div>
   );

@@ -3,14 +3,16 @@
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  // background-color: #282c34;
+  // min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  // display: grid;
+  // grid-template-columns: 50% 50%;
 }
 
 .App-link {
@@ -18,39 +20,40 @@
 }
 
 .colorCard {
-  height: 200px;
-  width: 200px;
+  height: 100px;
+  width: 100px;
+  margin: 1px;
 }
 
 .cardWrapper {
   display: flex;
-  width: 400px;
+  width: 410px;
   flex-wrap: wrap;
 }
 
-.startButton {
-  position: absolute;
-  width: 100px;
-  padding-top: 20px;
-  padding-bottom: 20px;
-}
+// .startButton {
+//   // position: absolute;
+//   width: 100px;
+//   padding-top: 20px;
+//   padding-bottom: 20px;
+// }
 
 .score {
-  position: absolute;
+  // position: absolute;
   width: 100px;
   height: 100px;
-  background-color: black;
-  border-radius: 50%;
+  background-color: lightgrey;
+  border-radius: 3px;
   line-height: 100px;
   font-size: 50px;
 }
 
 .lost {
-  position: absolute;
+  // position: absolute;
   width: 400px;
-  height: 400px;
-  background-color: black;
-  border-radius: 50%;
+  height: 200px;
+  background-color: lightgrey;
+  border-radius: 3px;
   line-height: 100px;
   font-size: 50px;
   display: flex;
@@ -64,10 +67,88 @@
   box-sizing: border-box;
 }
 
+.buttonsDiv {
+  padding: 20px;
+}
+
+$buttonColor: lightgray;
+
+.btn {
+  border: 1px solid darken($buttonColor, 15%);
+  border-radius: 4px;
+  cursor: pointer;
+  min-width: 150px;
+  min-height: 40px;
+}
+
+.styledButton {
+  @extend .btn;
+  background: darken($buttonColor, 5%);
+  color: darken($buttonColor, 60%);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  letter-spacing: 0.5px;
+  position: relative;
+  transform: skewX(0deg);
+  
+  
+  &::before {
+    @extend .btn;
+    content: attr(data-label);
+    background: $buttonColor;
+    display: grid;
+    place-items: center;
+    position: absolute;
+    top: -10px; left: 10px;
+    z-index: -1;
+    transition: all 0.5s ease;
+  }
+  
+  &:hover {
+      &::before {
+      top: -1px; left: -1px;
+    }
+  }
+  
+  &:focus {
+    outline: none;
+  }
+}
+
+
+
 .red {
   background-color: red;
   &.flash {
     background-color: rgb(255, 125, 125);
+  }
+}
+
+.gray {
+  background-color: gray;
+  &.flash {
+    background-color: rgba(128, 128, 128, 0.493);
+  }
+}
+
+.orange {
+  background-color: orange;
+  &.flash {
+    background-color: rgba(255, 166, 0, 0.493);
+  }
+}
+
+.lightblue {
+  background-color: lightskyblue;
+  &.flash {
+    background-color: rgba(135, 206, 250, 0.493);
+  }
+}
+
+.violet {
+  background-color: violet;
+  &.flash {
+    background-color: rgba(238, 130, 238, 0.486);
   }
 }
 
@@ -89,5 +170,33 @@
   background-color: yellow;
   &.flash {
     background-color: rgb(255, 255, 125);
+  }
+}
+
+.brown {
+  background-color: brown;
+  &.flash {
+    background-color: rgba(165, 42, 42, 0.493);
+  }
+}
+
+.lightgreen {
+  background-color: lightseagreen;
+  &.flash {
+    background-color: rgba(32, 178, 171, 0.493);
+  }
+}
+
+.black {
+  background-color: black;
+  &.flash {
+    background-color: rgba(0, 0, 0, 0.493);
+  }
+}
+
+.pink {
+  background-color: pink;
+  &.flash {
+    background-color: rgba(255, 192, 203, 0.493);
   }
 }
